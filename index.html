@@ -398,9 +398,10 @@ function animate() {
 }
 initParticles(); animate();
 window.onresize = initParticles;
-</script>
-</body>
-</html>
+</script><script>
+
+// dein bestehender Code...
+
 let saleDiscount = 0;
 let repDiscount = 0;
 
@@ -415,50 +416,8 @@ function ankauf() {
     showAlert(`Ankauf: ${auto} für ${preis}€`, "success");
 }
 
-function setSaleDiscount(val, btn){
-    saleDiscount = val;
-    document.querySelectorAll('.discount-wrap')[0].querySelectorAll('.btn-discount').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    calcSale();
-}
+// rest von deinem code...
 
-function calcSale(){
-    const preis = parseInt(document.getElementById('verkauf-preis').value) || 0;
-    const rabatt = preis * (saleDiscount/100);
-    const endpreis = preis - rabatt;
-    document.getElementById('verkauf-endpreis').innerText = `Endpreis: ${endpreis}€`;
-}
-
-setTimeout(() => {
-    const el = document.getElementById('verkauf-preis');
-    if(el) el.addEventListener('input', calcSale);
-}, 500);
-
-function verkauf(){
-    const auto = document.getElementById('verkauf-auto').value;
-    const preis = document.getElementById('verkauf-preis').value;
-    const vor = document.getElementById('verkauf-vorbesitzer').value;
-    const mit = document.getElementById('verkauf-mitarbeiter').value;
-
-    if(!auto || !preis || !vor || !mit) return showAlert("Alle Felder ausfüllen!", "error");
-
-    const rabatt = preis * (saleDiscount/100);
-    const endpreis = preis - rabatt;
-
-    showAlert(`Verkauf: ${auto} für ${endpreis}€`, "success");
-}
-
-function setRepDiscount(val, btn){
-    repDiscount = val;
-    document.querySelectorAll('.discount-wrap')[1].querySelectorAll('.btn-discount').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    repCalc();
-}
-
-function repCalc(){
-    const anzahl = parseInt(document.getElementById('rep-anzahl').value) || 0;
-    const preis = anzahl * 4000;
-    const rabatt = preis * (repDiscount/100);
-    const endpreis = preis - rabatt;
-    document.getElementById('rep-preis').innerText = `Preis: ${endpreis}€`;
-}
+</script>
+</body>
+</html>
