@@ -10,28 +10,18 @@ body {
     background: linear-gradient(135deg, #1e2a47, #0f172a);
     color: white;
     margin: 0;
+    padding: 0;
 }
 
-/* HEADER */
+/* 🔥 HEADER */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%;
     background: rgba(20,20,30,0.95);
     padding: 20px;
-    font-size: 22px;
-}
-
-/* MANAGEMENT BUTTON */
-.manage-btn {
-    background: #444;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.manage-btn:hover {
-    background: #666;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 
 /* LOGIN */
@@ -54,10 +44,19 @@ body {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
+    border-radius: 8px;
+    border: none;
 }
 
 /* APP */
-.app { display: none; padding: 40px; }
+.app {
+    display: none;
+}
+
+/* CONTENT */
+.main {
+    padding: 40px;
+}
 
 /* GRID */
 .container {
@@ -68,53 +67,88 @@ body {
     margin: auto;
 }
 
+@media (max-width: 1100px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* KARTEN */
 .card {
-    background: rgba(20,20,30,0.85);
+    background: rgba(20, 20, 30, 0.85);
     padding: 30px;
     border-radius: 15px;
-    min-height: 520px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    min-height: 520px; /* 🔥 länger gemacht */
     display: flex;
     flex-direction: column;
 }
 
+/* Titel */
+.card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Inputs */
 input {
+    width: 100%;
     padding: 15px;
-    margin: 10px 0;
+    margin: 12px 0;
     border-radius: 10px;
     border: none;
     background: #2a2a3d;
     color: white;
 }
 
+/* Buttons */
 button {
+    width: 100%;
     padding: 15px;
-    margin-top: auto;
     border-radius: 10px;
     border: none;
     background: #3a6df0;
     color: white;
+    cursor: pointer;
+    margin-top: auto; /* 🔥 schiebt Button nach unten */
 }
 
-.discount-wrap { display:flex; gap:10px; margin-top:10px; }
-.discount-wrap + .result { margin-top:25px; }
-
-.btn-discount { flex:1; padding:10px; background:#333; }
-.btn-discount.active { background:#3a6df0; }
-
-.result { text-align:center; font-weight:bold; }
-
-/* MANAGEMENT SCREEN */
-.management {
-    display: none;
-    padding: 40px;
+button:hover {
+    background: #2756b5;
 }
 
-.log-entry {
-    background: #222;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
+/* Rabatt */
+.discount-wrap {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* 🔥 MEHR ABSTAND ZUM PREIS */
+.discount-wrap + .result {
+    margin-top: 25px;
+}
+
+.btn-discount {
+    flex: 1;
+    padding: 10px;
+    background: #333;
+}
+
+.btn-discount.active {
+    background: #3a6df0;
+}
+
+/* Anzeige */
+.result {
+    text-align: center;
+    font-weight: bold;
 }
 </style>
 </head>
@@ -134,155 +168,126 @@ button {
 <!-- APP -->
 <div class="app" id="app">
 
-<div class="header">
-    🚗 Autohaus
-    <div class="manage-btn" onclick="openManagement()">Management</div>
-</div>
+<div class="header">🚗 Autohaus</div>
 
+<div class="main">
 <div class="container">
 
-<!-- ANKAUF -->
-<div class="card">
-<h2>🚗 Ankauf</h2>
-<input id="a_auto" placeholder="Auto Name">
-<input id="a_preis" type="number" placeholder="Preis (€)">
-<input id="a_vor" placeholder="Vorbesitzer">
-<input id="a_mit" placeholder="Mitarbeiter">
-<button onclick="ankauf()">Quittung erstellen</button>
+    <!-- ANKAUF -->
+    <div class="card">
+        <h2>🚗 Ankauf</h2>
+        <input id="a_auto" placeholder="Auto Name">
+        <input id="a_preis" type="number" placeholder="Preis (€)">
+        <input id="a_vor" placeholder="Vorbesitzer">
+        <input id="a_mit" placeholder="Mitarbeiter">
+        <button onclick="ankauf()">Quittung erstellen</button>
+    </div>
+
+    <!-- VERKAUF -->
+    <div class="card">
+        <h2>💰 Verkauf</h2>
+        <input id="v_auto" placeholder="Auto Name">
+        <input id="v_preis" type="number" placeholder="Preis (€)" oninput="calcSale()">
+        <input id="v_vor" placeholder="Vorbesitzer">
+        <input id="v_mit" placeholder="Mitarbeiter">
+
+        <div class="discount-wrap">
+            <button class="btn-discount active" onclick="setDiscount(0,this)">0%</button>
+            <button class="btn-discount" onclick="setDiscount(25,this)">25%</button>
+            <button class="btn-discount" onclick="setDiscount(50,this)">50%</button>
+            <button class="btn-discount" onclick="setDiscount(75,this)">75%</button>
+            <button class="btn-discount" onclick="setDiscount(100,this)">100%</button>
+        </div>
+
+        <div class="result" id="endpreis">Endpreis: 0€</div>
+
+        <button onclick="verkauf()">Speichern</button>
+    </div>
+
+    <!-- REPARATURKASTEN -->
+    <div class="card">
+        <h2>🔧 Reparaturkasten</h2>
+        <input id="r_anzahl" type="number" placeholder="Anzahl" oninput="calcRepair()">
+        <input id="r_mit" placeholder="Mitarbeiter">
+
+        <div class="discount-wrap">
+            <button class="btn-discount active" onclick="setRepairDiscount(0,this)">0%</button>
+            <button class="btn-discount" onclick="setRepairDiscount(25,this)">25%</button>
+            <button class="btn-discount" onclick="setRepairDiscount(50,this)">50%</button>
+            <button class="btn-discount" onclick="setRepairDiscount(75,this)">75%</button>
+            <button class="btn-discount" onclick="setRepairDiscount(100,this)">100%</button>
+        </div>
+
+        <div class="result" id="r_preis">Preis: 0€</div>
+
+        <button onclick="calcRepair()">Quittung erstellen</button>
+    </div>
+
+</div>
 </div>
 
-<!-- VERKAUF -->
-<div class="card">
-<h2>💰 Verkauf</h2>
-<input id="v_auto">
-<input id="v_preis" type="number" oninput="calcSale()">
-<input id="v_vor">
-<input id="v_mit">
-
-<div class="discount-wrap">
-<button class="btn-discount active" onclick="setDiscount(0,this)">0%</button>
-<button class="btn-discount" onclick="setDiscount(25,this)">25%</button>
-<button class="btn-discount" onclick="setDiscount(50,this)">50%</button>
-<button class="btn-discount" onclick="setDiscount(75,this)">75%</button>
-<button class="btn-discount" onclick="setDiscount(100,this)">100%</button>
-</div>
-
-<div class="result" id="endpreis">0€</div>
-<button onclick="verkauf()">Speichern</button>
-</div>
-
-<!-- REPARATUR -->
-<div class="card">
-<h2>🔧 Reparaturkasten</h2>
-<input id="r_anzahl" type="number" oninput="calcRepair()">
-<input id="r_mit">
-
-<div class="discount-wrap">
-<button class="btn-discount active" onclick="setRepairDiscount(0,this)">0%</button>
-<button class="btn-discount" onclick="setRepairDiscount(25,this)">25%</button>
-<button class="btn-discount" onclick="setRepairDiscount(50,this)">50%</button>
-<button class="btn-discount" onclick="setRepairDiscount(75,this)">75%</button>
-<button class="btn-discount" onclick="setRepairDiscount(100,this)">100%</button>
-</div>
-
-<div class="result" id="r_preis">0€</div>
-<button onclick="calcRepair(); saveRepair()">Quittung erstellen</button>
-</div>
-
-</div>
-</div>
-
-<!-- MANAGEMENT -->
-<div class="management" id="management">
-<h2>📊 Verlauf</h2>
-<div id="logs"></div>
-<button onclick="closeManagement()">Zurück</button>
 </div>
 
 <script>
-function loginUser(){
-    if(user.value==="Mitarbeiter" && pass.value==="Staff2026"){
-        login.style.display="none";
-        app.style.display="block";
-    } else alert("Falsch!");
+function loginUser() {
+    const u = document.getElementById("user").value;
+    const p = document.getElementById("pass").value;
+
+    if (u === "Mitarbeiter" && p === "Staff2026") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app").style.display = "block";
+    } else {
+        alert("Falsche Daten!");
+    }
 }
 
-/* MANAGEMENT LOGIN */
-function openManagement(){
-    let pw = prompt("Management Passwort:");
-    if(pw==="Vape"){
-        app.style.display="none";
-        management.style.display="block";
-        loadLogs();
-    } else alert("Falsch!");
+let discount = 0;
+let repairDiscount = 0;
+
+function ankauf() {
+    if (!a_auto.value || !a_preis.value || !a_vor.value || !a_mit.value) {
+        alert("Bitte alles ausfüllen!");
+        return;
+    }
+    alert(`Ankauf: ${a_auto.value} gespeichert`);
 }
 
-function closeManagement(){
-    management.style.display="none";
-    app.style.display="block";
-}
-
-/* STORAGE */
-function saveLog(text){
-    let logs = JSON.parse(localStorage.getItem("logs")||"[]");
-    logs.push(text);
-    localStorage.setItem("logs", JSON.stringify(logs));
-}
-
-function loadLogs(){
-    let logs = JSON.parse(localStorage.getItem("logs")||"[]");
-    let container = document.getElementById("logs");
-    container.innerHTML="";
-    logs.forEach(l=>{
-        container.innerHTML += `<div class="log-entry">${l}</div>`;
-    });
-}
-
-/* FUNCTIONS */
-let discount=0, repairDiscount=0;
-
-function ankauf(){
-    if(!a_auto.value||!a_preis.value) return alert("Fehlt!");
-    let text=`Ankauf: ${a_auto.value} ${a_preis.value}€`;
-    alert(text);
-    saveLog(text);
-}
-
-function setDiscount(v,b){
-    discount=v;
-    document.querySelectorAll('.discount-wrap')[0].querySelectorAll('button')
-    .forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
+function setDiscount(val, btn) {
+    discount = val;
+    document.querySelectorAll('.discount-wrap')[0]
+        .querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
     calcSale();
 }
 
-function calcSale(){
-    let p=parseFloat(v_preis.value)||0;
-    endpreis.innerText = p - p*discount/100 + "€";
+function calcSale() {
+    let preis = parseFloat(v_preis.value) || 0;
+    let end = preis - (preis * discount / 100);
+    endpreis.innerText = `Endpreis: ${end}€`;
 }
 
-function verkauf(){
-    let text=`Verkauf: ${v_auto.value}`;
-    alert(text);
-    saveLog(text);
+function verkauf() {
+    if (!v_auto.value || !v_preis.value || !v_vor.value || !v_mit.value) {
+        alert("Bitte alles ausfüllen!");
+        return;
+    }
+    alert(`Verkauf gespeichert`);
 }
 
-function setRepairDiscount(v,b){
-    repairDiscount=v;
-    document.querySelectorAll('.discount-wrap')[1].querySelectorAll('button')
-    .forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
+function setRepairDiscount(val, btn) {
+    repairDiscount = val;
+    document.querySelectorAll('.discount-wrap')[1]
+        .querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
     calcRepair();
 }
 
-function calcRepair(){
-    let p=(r_anzahl.value||0)*4000;
-    r_preis.innerText = p - p*repairDiscount/100 + "€";
-}
-
-function saveRepair(){
-    let text=`Reparatur: ${r_anzahl.value} Teile`;
-    saveLog(text);
+function calcRepair() {
+    let preis = (parseInt(r_anzahl.value) || 0) * 4000;
+    let end = preis - (preis * repairDiscount / 100);
+    r_preis.innerText = `Preis: ${end}€`;
 }
 </script>
 
