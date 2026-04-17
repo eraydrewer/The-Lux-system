@@ -4,25 +4,27 @@
 <meta charset="UTF-8">
 <title>THE LUX - AUTOHAUS SYSTEM</title>
 <style>
-/* Hintergrund mit Sterneffekt */
+/* Hintergrundfarbe: Angenehmes Dunkelblau */
 body {
     font-family: Arial, sans-serif;
-    background-color: #0a0a0a;
+    background-color: #1e2a47; /* Dunkelblau */
     color: white;
     padding: 20px;
-    overflow: hidden;
-    position: relative;
+    margin: 0;
+    overflow-y: scroll; /* Aktiviert Scrollen */
 }
 
+/* Karte für Formulare */
 .card {
     background: rgba(18, 18, 24, 0.7);
     padding: 20px;
     margin-bottom: 30px;
     border-radius: 10px;
     max-width: 500px;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
+/* Eingabefelder und Buttons */
 input, button {
     width: 100%;
     padding: 12px;
@@ -32,6 +34,7 @@ input, button {
     font-size: 16px;
 }
 
+/* Buttons */
 button {
     background-color: #3a6df0;
     color: white;
@@ -44,6 +47,7 @@ button:hover {
     background-color: #2756b5;
 }
 
+/* Rabattbuttons */
 .discount-wrap {
     display: flex;
     gap: 10px;
@@ -63,41 +67,18 @@ button:hover {
     background-color: #3a6df0;
 }
 
+/* Preisangaben */
 #endpreis, #rep-preis {
     font-weight: bold;
     margin-top: 10px;
     font-size: 18px;
 }
 
+/* Kartenüberschriften */
 .card h2 {
     text-align: center;
     font-size: 24px;
     margin-bottom: 15px;
-}
-
-/* Erstelle den Sternenhimmel */
-@keyframes starry-sky {
-    0% { background-position: 0 0; }
-    100% { background-position: 100% 100%; }
-}
-
-body {
-    position: relative;
-    background: #0a0a0a;
-    overflow: hidden;
-    animation: starry-sky 200s linear infinite;
-}
-
-body::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(white 1px, transparent 1px);
-    background-size: 20px 20px;
-    z-index: -1;
 }
 </style>
 </head>
