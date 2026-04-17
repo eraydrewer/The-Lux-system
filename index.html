@@ -41,6 +41,21 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+
+    /* HINTERGRUND BILD */
+    background: url("image.png") no-repeat center center/cover;
+
+    position: relative;
+}
+    .login-screen::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: rgba(0, 0, 0, 0.65);
 }
 
 .login-box {
@@ -51,7 +66,10 @@ body {
     text-align: center;
     box-shadow: 0 15px 40px rgba(0,0,0,0.6);
 }
-
+.login-box {
+    position: relative;
+    z-index: 2;
+}
 .login-box input {
     width: 100%;
     padding: 14px;
