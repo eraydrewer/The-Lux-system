@@ -22,6 +22,7 @@ body {
     letter-spacing: 1px;
     background: rgba(15, 15, 25, 0.9);
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
 }
 
 /* LOGIN */
@@ -38,6 +39,7 @@ body {
     border-radius: 18px;
     width: 320px;
     text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
 }
 
 .login-box input {
@@ -74,7 +76,7 @@ body {
     .container { grid-template-columns: 1fr; }
 }
 
-/* CARD */
+/* CARDS (GLASS EFFECT) */
 .card {
     background: rgba(25, 25, 40, 0.7);
     border: 1px solid rgba(255,255,255,0.08);
@@ -82,16 +84,21 @@ body {
     border-radius: 18px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     backdrop-filter: blur(12px);
-
-    display: flex;
-    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     min-height: 540px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.7);
 }
 
 /* TITEL */
 .card h2 {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 22px;
+    letter-spacing: 0.5px;
 }
 
 /* INPUTS */
@@ -103,6 +110,13 @@ input {
     border: none;
     background: #1f2438;
     color: white;
+    outline: none;
+    transition: 0.2s;
+}
+
+input:focus {
+    background: #2a3150;
+    box-shadow: 0 0 10px rgba(58,109,240,0.4);
 }
 
 /* BUTTONS */
@@ -115,9 +129,13 @@ button {
     color: white;
     cursor: pointer;
     font-weight: bold;
+    margin-top: auto;
+    transition: 0.2s;
+}
 
-    /* 🔥 WICHTIG: mehr Abstand nach oben */
-    margin-top: 35px;
+button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
 }
 
 /* DISCOUNTS */
@@ -132,10 +150,18 @@ button {
     padding: 10px;
     border-radius: 8px;
     background: #1a1f33;
+    border: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-discount:hover {
+    background: #2a3150;
 }
 
 .btn-discount.active {
     background: #3a6df0;
+    box-shadow: 0 0 12px rgba(58,109,240,0.4);
 }
 
 /* RESULT */
@@ -171,7 +197,7 @@ button {
     <div class="card">
         <h2>🚗 Ankauf</h2>
         <input id="a_auto" placeholder="Auto Name">
-        <input id="a_chip" placeholder="Chip">
+        <input id="a_chip" placeholder="Chip"> <!-- 🔥 NEU -->
         <input id="a_preis" type="number" placeholder="Preis (€)">
         <input id="a_vor" placeholder="Vorbesitzer">
         <input id="a_mit" placeholder="Mitarbeiter">
@@ -181,10 +207,10 @@ button {
     <!-- VERKAUF -->
     <div class="card">
         <h2>💰 Verkauf</h2>
-        <input id="v_auto">
-        <input id="v_preis" type="number" oninput="calcSale()">
-        <input id="v_vor">
-        <input id="v_mit">
+        <input id="v_auto" placeholder="Auto Name">
+        <input id="v_preis" type="number" placeholder="Preis (€)" oninput="calcSale()">
+        <input id="v_vor" placeholder="Vorbesitzer">
+        <input id="v_mit" placeholder="Mitarbeiter">
 
         <div class="discount-wrap">
             <button class="btn-discount active" onclick="setDiscount(0,this)">0%</button>
@@ -195,14 +221,15 @@ button {
         </div>
 
         <div class="result" id="endpreis">Preis: 0€</div>
+
         <button onclick="verkauf()">Speichern</button>
     </div>
 
     <!-- REPARATURKASTEN -->
     <div class="card">
         <h2>🔧 Reparaturkasten</h2>
-        <input id="r_anzahl" type="number" oninput="calcRepair()">
-        <input id="r_mit">
+        <input id="r_anzahl" type="number" placeholder="Anzahl" oninput="calcRepair()">
+        <input id="r_mit" placeholder="Mitarbeiter">
 
         <div class="discount-wrap">
             <button class="btn-discount active" onclick="setRepairDiscount(0,this)">0%</button>
@@ -213,6 +240,7 @@ button {
         </div>
 
         <div class="result" id="r_preis">Preis: 0€</div>
+
         <button onclick="calcRepair()">Quittung erstellen</button>
     </div>
 
@@ -232,6 +260,11 @@ function loginUser() {
     } else {
         alert("Falsche Daten!");
     }
+}
+
+/* 🔥 ZAHL FORMATIERUNG */
+function formatEuro(num){
+    return num.toLocaleString('de-DE') + "€";
 }
 
 let discount = 0;
@@ -257,7 +290,7 @@ function setDiscount(val, btn) {
 function calcSale() {
     let preis = parseFloat(v_preis.value) || 0;
     let end = preis - (preis * discount / 100);
-    endpreis.innerText = "Endpreis: " + end.toLocaleString('de-DE') + "€";
+    endpreis.innerText = "Endpreis: " + formatEuro(end);
 }
 
 function verkauf() {
@@ -280,7 +313,7 @@ function setRepairDiscount(val, btn) {
 function calcRepair() {
     let preis = (parseInt(r_anzahl.value) || 0) * 4000;
     let end = preis - (preis * repairDiscount / 100);
-    r_preis.innerText = "Preis: " + end.toLocaleString('de-DE') + "€";
+    r_preis.innerText = "Preis: " + formatEuro(end);
 }
 </script>
 
