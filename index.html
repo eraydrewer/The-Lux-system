@@ -14,6 +14,13 @@ body {
     overflow-y: scroll; /* Aktiviert Scrollen */
 }
 
+/* Container für beide Formulare nebeneinander */
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
 /* Karte für Formulare */
 .card {
     background: rgba(18, 18, 24, 0.7);
@@ -21,7 +28,8 @@ body {
     margin-bottom: 30px;
     border-radius: 10px;
     max-width: 500px;
-    margin: 20px auto;
+    margin: 20px 0;
+    flex: 1; /* Damit beide Karten nebeneinander passen */
 }
 
 /* Eingabefelder und Buttons */
@@ -85,35 +93,38 @@ button:hover {
 
 <body>
 
-<!-- ANKAUF -->
-<div class="card">
-    <h2>🚗 Ankauf</h2>
-    <input id="ankauf-auto" placeholder="Auto Name" type="text">
-    <input id="ankauf-preis" placeholder="Preis (€)" type="number">
-    <input id="ankauf-vorbesitzer" placeholder="Vorbesitzer" type="text">
-    <input id="ankauf-mitarbeiter" placeholder="Mitarbeiter" type="text">
-    <button onclick="ankauf()">Ankauf speichern</button>
-</div>
-
-<!-- VERKAUF -->
-<div class="card">
-    <h2>💰 Verkauf</h2>
-    <input id="verkauf-auto" placeholder="Auto Name" type="text">
-    <input id="verkauf-preis" placeholder="Preis (€)" type="number">
-    <input id="verkauf-vorbesitzer" placeholder="Vorbesitzer" type="text">
-    <input id="verkauf-mitarbeiter" placeholder="Mitarbeiter" type="text">
-
-    <div class="discount-wrap" id="sale-discount">
-        <button class="btn-discount active" onclick="setSaleDiscount(0,this)">0%</button>
-        <button class="btn-discount" onclick="setSaleDiscount(25,this)">25%</button>
-        <button class="btn-discount" onclick="setSaleDiscount(50,this)">50%</button>
-        <button class="btn-discount" onclick="setSaleDiscount(75,this)">75%</button>
-        <button class="btn-discount" onclick="setSaleDiscount(100,this)">100%</button>
+<!-- Container für Ankauf und Verkauf nebeneinander -->
+<div class="container">
+    <!-- ANKAUF -->
+    <div class="card">
+        <h2>🚗 Ankauf</h2>
+        <input id="ankauf-auto" placeholder="Auto Name" type="text">
+        <input id="ankauf-preis" placeholder="Preis (€)" type="number">
+        <input id="ankauf-vorbesitzer" placeholder="Vorbesitzer" type="text">
+        <input id="ankauf-mitarbeiter" placeholder="Mitarbeiter" type="text">
+        <button onclick="ankauf()">Ankauf speichern</button>
     </div>
 
-    <div id="endpreis">Endpreis: 0€</div>
+    <!-- VERKAUF -->
+    <div class="card">
+        <h2>💰 Verkauf</h2>
+        <input id="verkauf-auto" placeholder="Auto Name" type="text">
+        <input id="verkauf-preis" placeholder="Preis (€)" type="number">
+        <input id="verkauf-vorbesitzer" placeholder="Vorbesitzer" type="text">
+        <input id="verkauf-mitarbeiter" placeholder="Mitarbeiter" type="text">
 
-    <button onclick="verkauf()">Verkauf speichern</button>
+        <div class="discount-wrap" id="sale-discount">
+            <button class="btn-discount active" onclick="setSaleDiscount(0,this)">0%</button>
+            <button class="btn-discount" onclick="setSaleDiscount(25,this)">25%</button>
+            <button class="btn-discount" onclick="setSaleDiscount(50,this)">50%</button>
+            <button class="btn-discount" onclick="setSaleDiscount(75,this)">75%</button>
+            <button class="btn-discount" onclick="setSaleDiscount(100,this)">100%</button>
+        </div>
+
+        <div id="endpreis">Endpreis: 0€</div>
+
+        <button onclick="verkauf()">Verkauf speichern</button>
+    </div>
 </div>
 
 <!-- REPARATUR -->
