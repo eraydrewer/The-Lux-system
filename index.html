@@ -148,7 +148,7 @@ input, select { background: rgba(0,0,0,0.3); border: 1px solid var(--border); co
             <input type="text" id="verkauf-vorbesitzer" placeholder="Vorbesitzer">
             <input type="text" id="verkauf-mitarbeiter" placeholder="Mitarbeiter">
 
-            <div class="discount-wrap">
+            <div class="discount-wrap" id="sale-discount">
                 <button class="btn-discount active" onclick="setSaleDiscount(0,this)">0%</button>
                 <button class="btn-discount" onclick="setSaleDiscount(25,this)">25%</button>
                 <button class="btn-discount" onclick="setSaleDiscount(50,this)">50%</button>
@@ -167,7 +167,7 @@ input, select { background: rgba(0,0,0,0.3); border: 1px solid var(--border); co
             <input type="number" id="rep-anzahl" placeholder="Anzahl">
             <input type="text" id="rep-mitarbeiter" placeholder="Mitarbeiter">
 
-            <div class="discount-wrap">
+            <div class="discount-wrap" id="sale-discount">
                 <button class="btn-discount active" onclick="setRepDiscount(0,this)">0%</button>
                 <button class="btn-discount" onclick="setRepDiscount(25,this)">25%</button>
                 <button class="btn-discount" onclick="setRepDiscount(50,this)">50%</button>
@@ -418,6 +418,20 @@ function ankauf() {
 
 // rest von deinem code...
 
-</script>
+</script>function setSaleDiscount(val, btn){
+    saleDiscount = val;
+    document.querySelectorAll('#sale-discount .btn-discount')
+        .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    calcSale();
+}
+
+function setRepDiscount(val, btn){
+    repDiscount = val;
+    document.querySelectorAll('#rep-discount .btn-discount')
+        .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    repCalc();
+}
 </body>
 </html>
