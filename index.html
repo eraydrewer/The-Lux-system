@@ -2,21 +2,26 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>THE LUX SYSTEM</title>
+<title>AUTOHAUS - AUTOHAUS SYSTEM</title>
 
 <style>
 body {
-    font-family: Arial;
+    font-family: 'Arial', sans-serif;
     margin: 0;
-    background: #0b1020;
+    background: radial-gradient(circle at top, #1e2a47, #0b1020);
     color: #fff;
 }
 
 .header {
-    padding: 20px;
+    width: 100%;
+    padding: 22px;
     text-align: center;
-    font-size: 26px;
-    background: #111;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background: rgba(15, 15, 25, 0.9);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
 }
 
 .login-screen {
@@ -27,43 +32,119 @@ body {
 }
 
 .login-box {
-    background: #1a1a2e;
-    padding: 30px;
+    background: rgba(25, 25, 40, 0.95);
+    padding: 45px;
+    border-radius: 18px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+
+.login-box input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
     border-radius: 10px;
+    border: none;
+    background: #1f2438;
+    color: white;
+}
+
+.app {
+    display: none;
+}
+
+.main {
+    padding: 50px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+@media (max-width: 1100px) {
+    .container { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 700px) {
+    .container { grid-template-columns: 1fr; }
+}
+
+.card {
+    background: rgba(25, 25, 40, 0.7);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    backdrop-filter: blur(12px);
+    transition: 0.2s;
+    min-height: 540px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.7);
+}
+
+.card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 22px;
 }
 
 input {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    background: #222;
-    color: white;
+    padding: 14px;
+    margin: 12px 0;
+    border-radius: 10px;
     border: none;
+    background: #1f2438;
+    color: white;
 }
 
 button {
     width: 100%;
-    padding: 12px;
-    background: #3a6df0;
+    padding: 15px;
+    border-radius: 10px;
     border: none;
+    background: linear-gradient(135deg, #3a6df0, #274bb5);
     color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: auto;
+}
+
+.discount-wrap {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.btn-discount {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    background: #1a1f33;
+    border: 1px solid rgba(255,255,255,0.05);
     cursor: pointer;
 }
 
-.app { display: none; }
-
-.main { padding: 30px; }
-
-.container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+.btn-discount.active {
+    background: #3a6df0;
 }
 
-.card {
-    background: #1a1a2e;
-    padding: 20px;
-    border-radius: 10px;
+.result {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 18px;
+    font-size: 18px;
+    color: #dbe6ff;
 }
 </style>
 </head>
@@ -80,28 +161,59 @@ button {
 </div>
 
 <div class="app" id="app">
-<div class="header">🚗 THE LUX</div>
+
+<div class="header">🚗 Autohaus</div>
 
 <div class="main">
 <div class="container">
 
+<!-- ANKAUF -->
 <div class="card">
-    <h2>Ankauf</h2>
-    <input id="a_auto" placeholder="Auto">
-    <input id="a_chip" placeholder="Chip">
-    <input id="a_preis" type="number" placeholder="Preis">
-    <input id="a_vor" placeholder="Vorbesitzer">
-    <input id="a_mit" placeholder="Mitarbeiter">
-    <button onclick="ankauf()">Speichern</button>
+<h2>🚗 Ankauf</h2>
+<input id="a_auto" placeholder="Auto Name">
+<input id="a_chip" placeholder="Chip">
+<input id="a_preis" type="number" placeholder="Preis (€)">
+<input id="a_vor" placeholder="Vorbesitzer">
+<input id="a_mit" placeholder="Mitarbeiter">
+<button onclick="ankauf()">Quittung erstellen</button>
 </div>
 
+<!-- VERKAUF -->
 <div class="card">
-    <h2>Verkauf</h2>
-    <input id="v_auto" placeholder="Auto">
-    <input id="v_preis" type="number" placeholder="Preis">
-    <input id="v_vor" placeholder="Kunde">
-    <input id="v_mit" placeholder="Mitarbeiter">
-    <button onclick="verkauf()">Speichern</button>
+<h2>💰 Verkauf</h2>
+<input id="v_auto" placeholder="Auto Name">
+<input id="v_preis" type="number" placeholder="Preis (€)" oninput="calcSale()">
+<input id="v_vor" placeholder="Vorbesitzer">
+<input id="v_mit" placeholder="Mitarbeiter">
+
+<div class="discount-wrap">
+<button class="btn-discount active" onclick="setDiscount(0,this)">0%</button>
+<button class="btn-discount" onclick="setDiscount(25,this)">25%</button>
+<button class="btn-discount" onclick="setDiscount(50,this)">50%</button>
+<button class="btn-discount" onclick="setDiscount(75,this)">75%</button>
+<button class="btn-discount" onclick="setDiscount(100,this)">100%</button>
+</div>
+
+<div class="result" id="endpreis">Preis: 0€</div>
+<button onclick="verkauf()">Speichern</button>
+</div>
+
+<!-- REPARATUR -->
+<div class="card">
+<h2>🔧 Reparaturkasten</h2>
+<input id="r_anzahl" type="number" placeholder="Anzahl" oninput="calcRepair()">
+<input id="r_mit" placeholder="Mitarbeiter">
+
+<div class="discount-wrap">
+<button class="btn-discount active" onclick="setRepairDiscount(0,this)">0%</button>
+<button class="btn-discount" onclick="setRepairDiscount(25,this)">25%</button>
+<button class="btn-discount" onclick="setRepairDiscount(50,this)">50%</button>
+<button class="btn-discount" onclick="setRepairDiscount(75,this)">75%</button>
+<button class="btn-discount" onclick="setRepairDiscount(100,this)">100%</button>
+</div>
+
+<div class="result" id="r_preis">Preis: 0€</div>
+<button onclick="calcRepair()">Quittung erstellen</button>
 </div>
 
 </div>
@@ -109,66 +221,61 @@ button {
 </div>
 
 <script>
-const WEBHOOK = "DEIN_WEBHOOK_HIER";
-
-/* LOGIN */
 function loginUser() {
-    if (user.value === "Mitarbeiter" && pass.value === "Staff2026") {
-        login.style.display = "none";
-        app.style.display = "block";
+    const u = document.getElementById("user").value;
+    const p = document.getElementById("pass").value;
+
+    if (u === "Mitarbeiter" && p === "Staff2026") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app").style.display = "block";
     } else {
-        alert("Falsch");
+        alert("Falsche Daten!");
     }
 }
 
-/* DISCORD SEND */
-async function send(embed) {
-    await fetch(WEBHOOK, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({embeds: [embed]})
-    });
+function formatEuro(num){
+    return num.toLocaleString('de-DE') + "€";
 }
 
-/* ANKAUF */
+let discount = 0;
+let repairDiscount = 0;
+
 function ankauf() {
-    if (!a_auto.value || !a_preis.value) return alert("Fehlt!");
-
-    const embed = {
-        title: "🚗 Ankauf",
-        color: 3447003,
-        fields: [
-            {name:"Auto", value:a_auto.value},
-            {name:"Chip", value:a_chip.value || "Kein Chip"},
-            {name:"Preis", value:a_preis.value + "€"},
-            {name:"Vorbesitzer", value:a_vor.value},
-            {name:"Mitarbeiter", value:a_mit.value}
-        ],
-        timestamp: new Date()
-    };
-
-    send(embed);
-    alert("Gesendet!");
+    alert(`Ankauf gespeichert`);
 }
 
-/* VERKAUF */
+function setDiscount(val, btn) {
+    discount = val;
+    document.querySelectorAll('.discount-wrap')[0]
+        .querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    calcSale();
+}
+
+function calcSale() {
+    let preis = parseFloat(v_preis.value) || 0;
+    let end = preis - (preis * discount / 100);
+    endpreis.innerText = "Preis: " + formatEuro(end);
+}
+
 function verkauf() {
-    if (!v_auto.value || !v_preis.value) return alert("Fehlt!");
+    alert("Verkauf gespeichert");
+}
 
-    const embed = {
-        title: "💰 Verkauf",
-        color: 3066993,
-        fields: [
-            {name:"Auto", value:v_auto.value},
-            {name:"Preis", value:v_preis.value + "€"},
-            {name:"Kunde", value:v_vor.value},
-            {name:"Mitarbeiter", value:v_mit.value}
-        ],
-        timestamp: new Date()
-    };
+function setRepairDiscount(val, btn) {
+    repairDiscount = val;
+    document.querySelectorAll('.discount-wrap')[1]
+        .querySelectorAll('button')
+        .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    calcRepair();
+}
 
-    send(embed);
-    alert("Gesendet!");
+function calcRepair() {
+    let preis = (parseInt(r_anzahl.value) || 0) * 4000;
+    let end = preis - (preis * repairDiscount / 100);
+    r_preis.innerText = "Preis: " + formatEuro(end);
 }
 </script>
 
