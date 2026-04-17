@@ -10,10 +10,40 @@ body {
     background: linear-gradient(135deg, #1e2a47, #0f172a);
     color: white;
     margin: 0;
+    padding: 0;
+}
+
+/* LOGIN SCREEN */
+.login-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    background: rgba(20,20,30,0.9);
+    padding: 40px;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+/* APP (versteckt am Anfang) */
+.app {
+    display: none;
     padding: 40px;
 }
 
-/* 🔥 ALLE 3 FELDER NEBENEINANDER */
+/* DEIN ALTES DESIGN */
 .container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -22,7 +52,6 @@ body {
     margin: auto;
 }
 
-/* Responsive */
 @media (max-width: 1100px) {
     .container {
         grid-template-columns: 1fr 1fr;
@@ -35,7 +64,6 @@ body {
     }
 }
 
-/* Karten */
 .card {
     background: rgba(20, 20, 30, 0.85);
     padding: 30px;
@@ -43,35 +71,28 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* Titel */
 .card h2 {
     text-align: center;
     margin-bottom: 20px;
-    font-size: 26px;
 }
 
-/* Inputs */
 input {
     width: 100%;
     padding: 15px;
     margin: 12px 0;
     border-radius: 10px;
     border: none;
-    font-size: 16px;
     background: #2a2a3d;
     color: white;
 }
 
-/* Buttons */
 button {
     width: 100%;
     padding: 15px;
-    margin-top: 10px;
     border-radius: 10px;
     border: none;
     background: #3a6df0;
     color: white;
-    font-size: 16px;
     cursor: pointer;
 }
 
@@ -79,40 +100,44 @@ button:hover {
     background: #2756b5;
 }
 
-/* Rabatt */
 .discount-wrap {
     display: flex;
     gap: 10px;
-    margin-top: 10px;
 }
 
 .btn-discount {
     flex: 1;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 10px;
     background: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
 }
 
 .btn-discount.active {
     background: #3a6df0;
 }
 
-/* Anzeige */
 .result {
-    margin-top: 15px;
-    font-size: 18px;
-    font-weight: bold;
     text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 EIN CONTAINER FÜR ALLES -->
+<!-- LOGIN -->
+<div class="login-screen" id="login">
+    <div class="login-box">
+        <h2>Login</h2>
+        <input id="user" placeholder="Benutzername">
+        <input id="pass" type="password" placeholder="Passwort">
+        <button onclick="login()">Einloggen</button>
+    </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+
 <div class="container">
 
     <!-- ANKAUF -->
@@ -146,7 +171,7 @@ button:hover {
         <button onclick="verkauf()">Speichern</button>
     </div>
 
-    <!-- REPARATUR -->
+    <!-- REPARATURKASTEN -->
     <div class="card">
         <h2>🔧 Reparaturkasten</h2>
         <input id="r_anzahl" type="number" placeholder="Anzahl" oninput="calcRepair()">
@@ -166,27 +191,33 @@ button:hover {
     </div>
 
 </div>
+</div>
 
 <script>
+function login() {
+    const u = user.value;
+    const p = pass.value;
+
+    if (u === "Mitarbeiter" && p === "Staff2026") {
+        login.style.display = "none";
+        app.style.display = "block";
+    } else {
+        alert("Falsche Daten!");
+    }
+}
+
+/* REST DEIN SCRIPT */
 let discount = 0;
 let repairDiscount = 0;
 
-/* ANKAUF */
 function ankauf() {
-    let auto = a_auto.value;
-    let preis = a_preis.value;
-    let vor = a_vor.value;
-    let mit = a_mit.value;
-
-    if (!auto || !preis || !vor || !mit) {
+    if (!a_auto.value || !a_preis.value || !a_vor.value || !a_mit.value) {
         alert("Bitte alles ausfüllen!");
         return;
     }
-
-    alert(`Ankauf: ${auto} für ${preis}€ gespeichert`);
+    alert(`Ankauf: ${a_auto.value} gespeichert`);
 }
 
-/* VERKAUF */
 function setDiscount(val, btn) {
     discount = val;
     document.querySelectorAll('.discount-wrap')[0]
@@ -198,26 +229,17 @@ function setDiscount(val, btn) {
 
 function calcSale() {
     let preis = parseFloat(v_preis.value) || 0;
-    let end = preis - (preis * discount / 100);
-    endpreis.innerText = `Endpreis: ${end}€`;
+    endpreis.innerText = `Endpreis: ${preis - preis * discount / 100}€`;
 }
 
 function verkauf() {
-    let auto = v_auto.value;
-    let preis = parseFloat(v_preis.value);
-    let vor = v_vor.value;
-    let mit = v_mit.value;
-
-    if (!auto || !preis || !vor || !mit) {
+    if (!v_auto.value || !v_preis.value || !v_vor.value || !v_mit.value) {
         alert("Bitte alles ausfüllen!");
         return;
     }
-
-    let end = preis - (preis * discount / 100);
-    alert(`Verkauf: ${auto} für ${end}€ gespeichert`);
+    alert(`Verkauf gespeichert`);
 }
 
-/* REPARATUR */
 function setRepairDiscount(val, btn) {
     repairDiscount = val;
     document.querySelectorAll('.discount-wrap')[1]
@@ -228,10 +250,8 @@ function setRepairDiscount(val, btn) {
 }
 
 function calcRepair() {
-    let anzahl = parseInt(r_anzahl.value) || 0;
-    let preis = anzahl * 4000;
-    let end = preis - (preis * repairDiscount / 100);
-    r_preis.innerText = `Preis: ${end}€`;
+    let preis = (parseInt(r_anzahl.value) || 0) * 4000;
+    r_preis.innerText = `Preis: ${preis - preis * repairDiscount / 100}€`;
 }
 </script>
 
