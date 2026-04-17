@@ -7,82 +7,92 @@
 <style>
 body {
     font-family: Arial, sans-serif;
-    background-color: #1e2a47;
+    background: linear-gradient(135deg, #1e2a47, #0f172a);
     color: white;
-    padding: 20px;
     margin: 0;
+    padding: 40px;
 }
 
-/* 🔥 Container jetzt kompakter & zentriert */
+/* Layout */
 .container {
     display: flex;
     justify-content: center;
-    gap: 15px; /* weniger Abstand */
-    flex-wrap: wrap; /* besser auf kleineren Bildschirmen */
+    gap: 50px;
+    flex-wrap: wrap;
 }
 
 /* Karten */
 .card {
-    background: rgba(18, 18, 24, 0.7);
-    padding: 15px;
-    border-radius: 10px;
-    width: 320px; /* feste Breite für Gleichheit */
-}
-
-/* Inputs kompakter */
-input, button {
-    width: 100%;
-    padding: 10px;
-    margin: 6px 0;
-    border-radius: 8px;
-    border: 1px solid #333;
-    font-size: 14px;
-}
-
-button {
-    background-color: #3a6df0;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #2756b5;
-}
-
-/* Rabattbuttons */
-.discount-wrap {
-    display: flex;
-    gap: 6px;
-    margin-top: 8px;
-}
-
-.btn-discount {
-    flex: 1;
-    padding: 8px;
-    background-color: #333;
-    color: white;
-    border: 1px solid #444;
-    border-radius: 6px;
-    font-size: 12px;
-}
-
-.btn-discount.active {
-    background-color: #3a6df0;
-}
-
-/* Preise */
-#endpreis, #rep-preis {
-    font-weight: bold;
-    margin-top: 8px;
-    font-size: 16px;
+    background: rgba(20, 20, 30, 0.85);
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 /* Titel */
 .card h2 {
     text-align: center;
-    font-size: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 26px;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    background: #2a2a3d;
+    color: white;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #3a6df0;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2756b5;
+}
+
+/* Rabatt */
+.discount-wrap {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-discount {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    background: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-discount.active {
+    background: #3a6df0;
+}
+
+/* Anzeige */
+.result {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
 }
 </style>
 </head>
@@ -94,30 +104,30 @@ button:hover {
     <!-- ANKAUF -->
     <div class="card">
         <h2>🚗 Ankauf</h2>
-        <input id="ankauf-auto" placeholder="Auto Name" type="text">
-        <input id="ankauf-preis" placeholder="Preis (€)" type="number">
-        <input id="ankauf-vorbesitzer" placeholder="Vorbesitzer" type="text">
-        <input id="ankauf-mitarbeiter" placeholder="Mitarbeiter" type="text">
+        <input id="a_auto" placeholder="Auto Name">
+        <input id="a_preis" type="number" placeholder="Preis (€)">
+        <input id="a_vor" placeholder="Vorbesitzer">
+        <input id="a_mit" placeholder="Mitarbeiter">
         <button onclick="ankauf()">Speichern</button>
     </div>
 
     <!-- VERKAUF -->
     <div class="card">
         <h2>💰 Verkauf</h2>
-        <input id="verkauf-auto" placeholder="Auto Name" type="text">
-        <input id="verkauf-preis" placeholder="Preis (€)" type="number" oninput="calcSale()">
-        <input id="verkauf-vorbesitzer" placeholder="Vorbesitzer" type="text">
-        <input id="verkauf-mitarbeiter" placeholder="Mitarbeiter" type="text">
+        <input id="v_auto" placeholder="Auto Name">
+        <input id="v_preis" type="number" placeholder="Preis (€)" oninput="calcSale()">
+        <input id="v_vor" placeholder="Vorbesitzer">
+        <input id="v_mit" placeholder="Mitarbeiter">
 
-        <div class="discount-wrap" id="sale-discount">
-            <button class="btn-discount active" onclick="setSaleDiscount(0,this)">0%</button>
-            <button class="btn-discount" onclick="setSaleDiscount(25,this)">25%</button>
-            <button class="btn-discount" onclick="setSaleDiscount(50,this)">50%</button>
-            <button class="btn-discount" onclick="setSaleDiscount(75,this)">75%</button>
-            <button class="btn-discount" onclick="setSaleDiscount(100,this)">100%</button>
+        <div class="discount-wrap">
+            <button class="btn-discount active" onclick="setDiscount(0,this)">0%</button>
+            <button class="btn-discount" onclick="setDiscount(25,this)">25%</button>
+            <button class="btn-discount" onclick="setDiscount(50,this)">50%</button>
+            <button class="btn-discount" onclick="setDiscount(75,this)">75%</button>
+            <button class="btn-discount" onclick="setDiscount(100,this)">100%</button>
         </div>
 
-        <div id="endpreis">Endpreis: 0€</div>
+        <div class="result" id="endpreis">Endpreis: 0€</div>
 
         <button onclick="verkauf()">Speichern</button>
     </div>
@@ -127,86 +137,85 @@ button:hover {
 <!-- REPARATUR -->
 <div class="container">
     <div class="card">
-        <h2>🔧 Reparaturkasten</h2>
-        <input id="rep-anzahl" placeholder="Anzahl" type="number" oninput="repCalc()">
-        <input id="rep-mitarbeiter" placeholder="Mitarbeiter" type="text">
+        <h2>🔧 Reparatur</h2>
+        <input id="r_anzahl" type="number" placeholder="Anzahl" oninput="calcRepair()">
+        <input id="r_mit" placeholder="Mitarbeiter">
 
-        <div class="discount-wrap" id="rep-discount">
-            <button class="btn-discount active" onclick="setRepDiscount(0,this)">0%</button>
-            <button class="btn-discount" onclick="setRepDiscount(25,this)">25%</button>
-            <button class="btn-discount" onclick="setRepDiscount(50,this)">50%</button>
-            <button class="btn-discount" onclick="setRepDiscount(75,this)">75%</button>
-            <button class="btn-discount" onclick="setRepDiscount(100,this)">100%</button>
+        <div class="discount-wrap">
+            <button class="btn-discount active" onclick="setRepairDiscount(0,this)">0%</button>
+            <button class="btn-discount" onclick="setRepairDiscount(25,this)">25%</button>
+            <button class="btn-discount" onclick="setRepairDiscount(50,this)">50%</button>
+            <button class="btn-discount" onclick="setRepairDiscount(75,this)">75%</button>
+            <button class="btn-discount" onclick="setRepairDiscount(100,this)">100%</button>
         </div>
 
-        <div id="rep-preis">Preis: 0€</div>
+        <div class="result" id="r_preis">Preis: 0€</div>
 
-        <button onclick="repCalc()">Berechnen</button>
+        <button onclick="calcRepair()">Berechnen</button>
     </div>
 </div>
 
 <script>
-let saleDiscount = 0;
-let repDiscount = 0;
+let discount = 0;
+let repairDiscount = 0;
 
+/* ANKAUF */
 function ankauf() {
-    const auto = document.getElementById('ankauf-auto').value;
-    const preis = document.getElementById('ankauf-preis').value;
-    const vor = document.getElementById('ankauf-vorbesitzer').value;
-    const mit = document.getElementById('ankauf-mitarbeiter').value;
+    let auto = a_auto.value;
+    let preis = a_preis.value;
+    let vor = a_vor.value;
+    let mit = a_mit.value;
 
     if (!auto || !preis || !vor || !mit) {
-        alert("Alle Felder ausfüllen!");
+        alert("Bitte alles ausfüllen!");
         return;
     }
 
-    alert(`Ankauf gespeichert: ${auto} für ${preis}€`);
+    alert(`Ankauf: ${auto} für ${preis}€ gespeichert`);
 }
 
-function setSaleDiscount(val, btn) {
-    saleDiscount = val;
-    document.querySelectorAll('#sale-discount .btn-discount')
-    .forEach(b => b.classList.remove('active'));
+/* VERKAUF */
+function setDiscount(val, btn) {
+    discount = val;
+    document.querySelectorAll('.btn-discount').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     calcSale();
 }
 
 function calcSale() {
-    const preis = parseFloat(document.getElementById('verkauf-preis').value) || 0;
-    const rabatt = preis * (saleDiscount / 100);
-    const endpreis = preis - rabatt;
-    document.getElementById('endpreis').innerText = `Endpreis: ${endpreis}€`;
+    let preis = parseFloat(v_preis.value) || 0;
+    let end = preis - (preis * discount / 100);
+    endpreis.innerText = `Endpreis: ${end}€`;
 }
 
 function verkauf() {
-    const auto = document.getElementById('verkauf-auto').value;
-    const preis = parseFloat(document.getElementById('verkauf-preis').value);
-    const vor = document.getElementById('verkauf-vorbesitzer').value;
-    const mit = document.getElementById('verkauf-mitarbeiter').value;
+    let auto = v_auto.value;
+    let preis = parseFloat(v_preis.value);
+    let vor = v_vor.value;
+    let mit = v_mit.value;
 
     if (!auto || !preis || !vor || !mit) {
-        alert("Alle Felder ausfüllen!");
+        alert("Bitte alles ausfüllen!");
         return;
     }
 
-    const endpreis = preis - (preis * saleDiscount / 100);
-    alert(`Verkauf gespeichert: ${auto} für ${endpreis}€`);
+    let end = preis - (preis * discount / 100);
+    alert(`Verkauf: ${auto} für ${end}€ gespeichert`);
 }
 
-function setRepDiscount(val, btn) {
-    repDiscount = val;
-    document.querySelectorAll('#rep-discount .btn-discount')
-    .forEach(b => b.classList.remove('active'));
+/* REPARATUR */
+function setRepairDiscount(val, btn) {
+    repairDiscount = val;
+    btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    repCalc();
+    calcRepair();
 }
 
-function repCalc() {
-    const anzahl = parseInt(document.getElementById('rep-anzahl').value) || 0;
-    const preis = anzahl * 4000;
-    const rabatt = preis * (repDiscount / 100);
-    const endpreis = preis - rabatt;
-    document.getElementById('rep-preis').innerText = `Preis: ${endpreis}€`;
+function calcRepair() {
+    let anzahl = parseInt(r_anzahl.value) || 0;
+    let preis = anzahl * 4000;
+    let end = preis - (preis * repairDiscount / 100);
+    r_preis.innerText = `Preis: ${end}€`;
 }
 </script>
 
