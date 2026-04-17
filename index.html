@@ -126,43 +126,60 @@ input, select { background: rgba(0,0,0,0.3); border: 1px solid var(--border); co
     </div>
 </div>
 
-<div id="main-ui" class="section">
-    <div class="cat-nav" id="cat-nav-bar">
-        <button class="btn-cat active" onclick="changeTab('Getränke', this)">Getränke</button>
-        <button class="btn-cat" onclick="changeTab('Snacks', this)">Snacks</button>
-        <button class="btn-cat" onclick="changeTab('Fahrten', this)">Fahrten</button>
-        <button class="btn-cat" onclick="changeTab('Heli', this)">Flüge</button>
-        <button class="btn-cat" onclick="changeTab('Fightclub', this)">Fightclub</button>
-        <button class="btn-cat" onclick="changeTab('Wetten', this)">Wetten</button>
-    </div>
-    <div class="grid" id="grid-pos"></div>
-    
-    <div id="bet-form" style="display:none; background: var(--card); padding: 50px; border-radius: 40px; border: 1px solid var(--border);">
-        <h2 style="margin-top:0;">Wette platzieren</h2>
-        <div class="grid" style="grid-template-columns: 1fr 1fr;">
-            <input type="text" id="bet-user" placeholder="Name">
-            <input type="text" id="bet-tel" placeholder="Tel">
-            <input type="number" id="bet-amount" placeholder="Einsatz">
-            <input type="text" id="bet-target" placeholder="Wette auf...">
-        </div>
-        <button class="btn-blue" style="width:100%; margin-top:30px; padding: 22px; border-radius:20px;" onclick="addBetToBill()">WETTE HINZUFÜGEN</button>
-    </div>
+<div id="main-ui" class="section active">
 
-    <div id="bill-area">
-        <input type="text" id="staff-name-input" style="border: 2px solid var(--primary-glow); text-align:center; font-weight:700;" placeholder="DEIN NAME (FÜR QUITTUNG)">
-        <div id="bill-items"></div>
-        <div class="discount-wrap">
-            <button class="btn-discount active" onclick="setDiscount(0, this)">0%</button>
-            <button class="btn-discount" onclick="setDiscount(25, this)">25%</button>
-            <button class="btn-discount" onclick="setDiscount(50, this)">50%</button>
-            <button class="btn-discount" onclick="setDiscount(75, this)">75%</button>
-            <button class="btn-discount" onclick="setDiscount(100, this)">100%</button>
+    <div style="max-width:900px; margin:auto;">
+
+        <!-- ANKAUF -->
+        <div class="card">
+            <h2>🚗 Ankauf</h2>
+            <input type="text" id="ankauf-auto" placeholder="Auto Name">
+            <input type="number" id="ankauf-preis" placeholder="Ankaufspreis">
+            <input type="text" id="ankauf-vorbesitzer" placeholder="Vorbesitzer">
+            <input type="text" id="ankauf-mitarbeiter" placeholder="Mitarbeiter">
+            <button class="btn-blue" style="width:100%; margin-top:15px;" onclick="ankauf()">ANKAUF SPEICHERN</button>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px solid var(--border); padding-top: 30px;">
-            <span style="color: var(--text-dim); font-weight: 600;">GESAMTBERECHNUNG</span>
-            <span id="bill-total">0 EUR</span>
+
+        <!-- VERKAUF -->
+        <div class="card" style="margin-top:40px;">
+            <h2>💰 Verkauf</h2>
+            <input type="text" id="verkauf-auto" placeholder="Auto Name">
+            <input type="number" id="verkauf-preis" placeholder="Preis">
+            <input type="text" id="verkauf-vorbesitzer" placeholder="Vorbesitzer">
+            <input type="text" id="verkauf-mitarbeiter" placeholder="Mitarbeiter">
+
+            <div class="discount-wrap">
+                <button class="btn-discount active" onclick="setSaleDiscount(0,this)">0%</button>
+                <button class="btn-discount" onclick="setSaleDiscount(25,this)">25%</button>
+                <button class="btn-discount" onclick="setSaleDiscount(50,this)">50%</button>
+                <button class="btn-discount" onclick="setSaleDiscount(75,this)">75%</button>
+                <button class="btn-discount" onclick="setSaleDiscount(100,this)">100%</button>
+            </div>
+
+            <div id="verkauf-endpreis" style="font-size:22px; font-weight:800;">Endpreis: 0€</div>
+
+            <button class="btn-blue" style="width:100%; margin-top:15px;" onclick="verkauf()">VERKAUF SPEICHERN</button>
         </div>
-        <button class="btn-blue" style="width:100%; margin-top:40px; font-size:22px; padding: 30px; border-radius:25px; font-weight:800;" onclick="checkout()">QUITTUNG ABSCHLIESSEN</button>
+
+        <!-- REPARATUR -->
+        <div class="card" style="margin-top:40px;">
+            <h2>🔧 Reparaturkasten</h2>
+            <input type="number" id="rep-anzahl" placeholder="Anzahl">
+            <input type="text" id="rep-mitarbeiter" placeholder="Mitarbeiter">
+
+            <div class="discount-wrap">
+                <button class="btn-discount active" onclick="setRepDiscount(0,this)">0%</button>
+                <button class="btn-discount" onclick="setRepDiscount(25,this)">25%</button>
+                <button class="btn-discount" onclick="setRepDiscount(50,this)">50%</button>
+                <button class="btn-discount" onclick="setRepDiscount(75,this)">75%</button>
+                <button class="btn-discount" onclick="setRepDiscount(100,this)">100%</button>
+            </div>
+
+            <div id="rep-preis" style="font-size:22px; font-weight:800;">Preis: 0€</div>
+
+            <button class="btn-blue" style="width:100%; margin-top:15px;" onclick="repCalc()">BERECHNEN</button>
+        </div>
+
     </div>
 </div>
 
@@ -384,3 +401,64 @@ window.onresize = initParticles;
 </script>
 </body>
 </html>
+let saleDiscount = 0;
+let repDiscount = 0;
+
+function ankauf() {
+    const auto = document.getElementById('ankauf-auto').value;
+    const preis = document.getElementById('ankauf-preis').value;
+    const vor = document.getElementById('ankauf-vorbesitzer').value;
+    const mit = document.getElementById('ankauf-mitarbeiter').value;
+
+    if(!auto || !preis || !vor || !mit) return showAlert("Alle Felder ausfüllen!", "error");
+
+    showAlert(`Ankauf: ${auto} für ${preis}€`, "success");
+}
+
+function setSaleDiscount(val, btn){
+    saleDiscount = val;
+    document.querySelectorAll('.discount-wrap')[0].querySelectorAll('.btn-discount').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    calcSale();
+}
+
+function calcSale(){
+    const preis = parseInt(document.getElementById('verkauf-preis').value) || 0;
+    const rabatt = preis * (saleDiscount/100);
+    const endpreis = preis - rabatt;
+    document.getElementById('verkauf-endpreis').innerText = `Endpreis: ${endpreis}€`;
+}
+
+setTimeout(() => {
+    const el = document.getElementById('verkauf-preis');
+    if(el) el.addEventListener('input', calcSale);
+}, 500);
+
+function verkauf(){
+    const auto = document.getElementById('verkauf-auto').value;
+    const preis = document.getElementById('verkauf-preis').value;
+    const vor = document.getElementById('verkauf-vorbesitzer').value;
+    const mit = document.getElementById('verkauf-mitarbeiter').value;
+
+    if(!auto || !preis || !vor || !mit) return showAlert("Alle Felder ausfüllen!", "error");
+
+    const rabatt = preis * (saleDiscount/100);
+    const endpreis = preis - rabatt;
+
+    showAlert(`Verkauf: ${auto} für ${endpreis}€`, "success");
+}
+
+function setRepDiscount(val, btn){
+    repDiscount = val;
+    document.querySelectorAll('.discount-wrap')[1].querySelectorAll('.btn-discount').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    repCalc();
+}
+
+function repCalc(){
+    const anzahl = parseInt(document.getElementById('rep-anzahl').value) || 0;
+    const preis = anzahl * 4000;
+    const rabatt = preis * (repDiscount/100);
+    const endpreis = preis - rabatt;
+    document.getElementById('rep-preis').innerText = `Preis: ${endpreis}€`;
+}
