@@ -14,15 +14,27 @@ body {
 
 .header {
     width: 100%;
-    padding: 22px;
+    padding: 25px;
     text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    background: rgba(15, 15, 25, 0.9);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    backdrop-filter: blur(10px);
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+
+    background: linear-gradient(90deg, #3a6df0, #274bb5, #3a6df0);
+    background-size: 200% 200%;
+    animation: glowMove 6s ease infinite;
+
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    text-shadow: 0 0 10px rgba(58,109,240,0.8);
 }
+  @keyframes glowMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}  
 
 .login-screen {
     display: flex;
@@ -148,7 +160,7 @@ button {
 }
 </style>
 </head>
-
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 <body>
 
 <div class="login-screen" id="login">
