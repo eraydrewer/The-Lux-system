@@ -13,7 +13,7 @@ body {
     padding: 0;
 }
 
-/* LOGIN SCREEN */
+/* LOGIN */
 .login-screen {
     display: flex;
     justify-content: center;
@@ -37,13 +37,13 @@ body {
     border: none;
 }
 
-/* APP (versteckt am Anfang) */
+/* APP */
 .app {
     display: none;
     padding: 40px;
 }
 
-/* DEIN ALTES DESIGN */
+/* 3 FELDER NEBENEINANDER */
 .container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -52,6 +52,7 @@ body {
     margin: auto;
 }
 
+/* Responsive */
 @media (max-width: 1100px) {
     .container {
         grid-template-columns: 1fr 1fr;
@@ -64,6 +65,7 @@ body {
     }
 }
 
+/* Karten */
 .card {
     background: rgba(20, 20, 30, 0.85);
     padding: 30px;
@@ -71,11 +73,13 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
+/* Titel */
 .card h2 {
     text-align: center;
     margin-bottom: 20px;
 }
 
+/* Inputs */
 input {
     width: 100%;
     padding: 15px;
@@ -86,6 +90,7 @@ input {
     color: white;
 }
 
+/* Buttons */
 button {
     width: 100%;
     padding: 15px;
@@ -100,6 +105,7 @@ button:hover {
     background: #2756b5;
 }
 
+/* Rabatt */
 .discount-wrap {
     display: flex;
     gap: 10px;
@@ -115,6 +121,7 @@ button:hover {
     background: #3a6df0;
 }
 
+/* Anzeige */
 .result {
     text-align: center;
     margin-top: 10px;
@@ -131,7 +138,7 @@ button:hover {
         <h2>Login</h2>
         <input id="user" placeholder="Benutzername">
         <input id="pass" type="password" placeholder="Passwort">
-        <button onclick="login()">Einloggen</button>
+        <button onclick="loginUser()">Einloggen</button>
     </div>
 </div>
 
@@ -194,22 +201,22 @@ button:hover {
 </div>
 
 <script>
-function login() {
-    const u = user.value;
-    const p = pass.value;
+function loginUser() {
+    const u = document.getElementById("user").value;
+    const p = document.getElementById("pass").value;
 
     if (u === "Mitarbeiter" && p === "Staff2026") {
-        login.style.display = "none";
-        app.style.display = "block";
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app").style.display = "block";
     } else {
         alert("Falsche Daten!");
     }
 }
 
-/* REST DEIN SCRIPT */
 let discount = 0;
 let repairDiscount = 0;
 
+/* ANKAUF */
 function ankauf() {
     if (!a_auto.value || !a_preis.value || !a_vor.value || !a_mit.value) {
         alert("Bitte alles ausfüllen!");
@@ -218,6 +225,7 @@ function ankauf() {
     alert(`Ankauf: ${a_auto.value} gespeichert`);
 }
 
+/* VERKAUF */
 function setDiscount(val, btn) {
     discount = val;
     document.querySelectorAll('.discount-wrap')[0]
@@ -229,7 +237,8 @@ function setDiscount(val, btn) {
 
 function calcSale() {
     let preis = parseFloat(v_preis.value) || 0;
-    endpreis.innerText = `Endpreis: ${preis - preis * discount / 100}€`;
+    let end = preis - (preis * discount / 100);
+    endpreis.innerText = `Endpreis: ${end}€`;
 }
 
 function verkauf() {
@@ -240,6 +249,7 @@ function verkauf() {
     alert(`Verkauf gespeichert`);
 }
 
+/* REPARATUR */
 function setRepairDiscount(val, btn) {
     repairDiscount = val;
     document.querySelectorAll('.discount-wrap')[1]
@@ -251,7 +261,8 @@ function setRepairDiscount(val, btn) {
 
 function calcRepair() {
     let preis = (parseInt(r_anzahl.value) || 0) * 4000;
-    r_preis.innerText = `Preis: ${preis - preis * repairDiscount / 100}€`;
+    let end = preis - (preis * repairDiscount / 100);
+    r_preis.innerText = `Preis: ${end}€`;
 }
 </script>
 
